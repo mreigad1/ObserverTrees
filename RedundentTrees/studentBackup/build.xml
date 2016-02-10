@@ -1,0 +1,59 @@
+
+<project name="studentBackup" default="compile" basedir=".">
+
+  <property name="build.compiler"              value="modern"/>
+  <property name="src"                  value="src"/>
+  <property name="BUILD"                value="build"/>
+  <property name="classes"              value="${BUILD}/classes"/>
+
+
+<target name="run" depends="jar">
+	<java jar="${BUILD}/jar/studentBackup.jar"  fork="true">
+		<arg value="input.txt"/>	<!-- input fileName -->
+		<arg value="20"/>		<!-- UPDATE_VALUE for visitor -->
+		<arg value="0"/>		<!-- debug value [0, 4] -->
+	</java>
+	
+    </target>
+
+
+  <target name="compile"
+          depends="studentBackup"/>
+
+  <target name="clean">
+       <delete dir="${BUILD}"/>
+  </target>
+
+  <!-- Prepare target directories -->
+  <target name="prepare">
+        <mkdir dir="${BUILD}"/>
+        <mkdir dir="${classes}"/>
+  </target>
+
+
+  <!-- ** means all subdirectories as well -->
+  <!-- * means all files in the current directory -->
+  <!-- for just java files use *.java -->
+
+  <target name="studentBackup" depends="prepare">
+    <javac srcdir="${src}"
+           includes="studentBackup/**"
+           excludes="**/package.html"
+           destdir="${classes}"
+           classpath="${classes}"
+           debug="on"
+           optimize="on"
+           deprecation="off"/>
+  </target>
+
+ <target name="jar">
+        <mkdir dir="${BUILD}/jar"/>
+        <jar destfile="${BUILD}/jar/studentBackup.jar" basedir="${BUILD}/classes">
+            <manifest>
+                <attribute name="Main-Class" value="studentBackup.driver.Driver"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+</project>
